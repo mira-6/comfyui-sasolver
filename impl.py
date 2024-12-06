@@ -1,8 +1,31 @@
+# needed to duplicate this here to solve an inconsistency
+from importlib import import_module
+BACKEND = None
+if not BACKEND:
+    try:
+        _ = import_module("modules.sd_samplers_kdiffusion")
+        sampling = import_module("k_diffusion.sampling")
+        BACKEND = "WebUI"
+    except ImportError as _:
+        pass
+
+if not BACKEND:
+    try:
+        sampling = import_module("comfy.k_diffusion.sampling")
+        BACKEND = "ComfyUI"
+    except ImportError as _:
+        pass
+
+
 
 from functools import partial
 import torch
-from . import sa_solver
-from . import smea_dy
+if BACKEND == "WebUI":
+    import sa_solver
+    import smea_dy
+else:
+    from . import sa_solver
+    from . import smea_dy
 from tqdm import trange
 
 # Modify from: https://github.com/scxue/SA-Solver
@@ -14,9 +37,14 @@ def sample_sa_solver(model, x, sigmas, extra_args=None, callback=None, disable=F
 
     extra_args = {} if extra_args is None else extra_args
     if tau_func is None:
-        model_sampling = model.inner_model.model_patcher.get_model_object('model_sampling')
-        start_sigma = model_sampling.percent_to_sigma(0.2)
-        end_sigma = model_sampling.percent_to_sigma(0.8)
+        if smea_dy.BACKEND == "ComfyUI":
+            model_sampling = model.inner_model.model_patcher.get_model_object('model_sampling')
+            start_sigma = model_sampling.percent_to_sigma(0.2)
+            end_sigma = model_sampling.percent_to_sigma(0.8)
+        else:
+            # this is NOT the same.
+            start_sigma = sigmas[0]
+            end_sigma = sigmas[-1]
         tau_func = partial(sa_solver.default_tau_func, eta=1.0, eta_start_sigma=start_sigma, eta_end_sigma=end_sigma)
     tau = tau_func
     noise_sampler = partial(sa_solver.device_noise_sampler, x=x, noise_device='cpu') if noise_sampler is None else noise_sampler
