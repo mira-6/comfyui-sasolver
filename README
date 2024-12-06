@@ -1,2 +1,4 @@
 # SASolver for Comfyui
 Adapted from https://github.com/comfyanonymous/ComfyUI/pull/4454 and https://github.com/Koishi-Star/Euler-Smea-Dyn-Sampler
+
+Should also work on Reforge.
