@@ -4,8 +4,9 @@ try:
     from experimental import sample_sa_solver_renoise, sample_sa_solver_renoise_dy
 
     if smea_dy.BACKEND == "WebUI":
-        from modules import scripts, sd_samplers_common, sd_samplers
+        from modules import scripts, sd_samplers_common, sd_samplers, script_callbacks, shared
         from modules.sd_samplers_kdiffusion import sampler_extra_params, KDiffusionSampler
+        import gradio as gr
 
         class SASmea(scripts.Script):
             def title(self):
@@ -41,7 +42,24 @@ try:
                     sd_samplers.all_samplers_map = {x.name: x for x in sd_samplers.all_samplers}
                     sd_samplers.set_samplers()
                     smea_dy.INITIALIZED = True
+        def on_ui_settings():
+            section = ('SA-Solver', "SA-Solver")
+            shared.opts.add_option("renoise_scale", shared.OptionInfo(
+            default = 1.0,
+            label = "Renoise Scale",
+            component = gr.Slider,
+            component_args = { 
+                            'interactive': True, 
+                            'minimum':0, 
+                            'maximum':100, 
+                            'step':0.01, 
+                            },
+            section = section
+            ))
+        script_callbacks.on_ui_settings(on_ui_settings)
 
 except ImportError as _:
     print("Failed!")
     pass
+
+from modules import devices, script_callbacks, shared
