@@ -56,6 +56,18 @@ try:
                             },
             section = section
             ))
+            shared.opts.add_option("renoise_seed", shared.OptionInfo(
+            default = 1,
+            label = "Renoise Seed",
+            component = gr.Slider,
+            component_args = { 
+                            'interactive': True, 
+                            'minimum':0, 
+                            'maximum':0xffffffffffffffff, 
+                            'step':1, 
+                            },
+            section = section
+            ))
         script_callbacks.on_ui_settings(on_ui_settings)
 
 except ImportError as _:
