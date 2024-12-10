@@ -1,6 +1,7 @@
 try:
     import smea_dy
     from impl import sample_sa_solver, sample_sa_solver_dy, sample_sa_solver_pece, sample_sa_solver_pece_dy, sample_sa_solver_smea_dy, sample_sa_solver_pece_smea_dy
+    from experimental import sample_sa_solver_renoise, sample_sa_solver_renoise_dy
 
     if smea_dy.BACKEND == "WebUI":
         from modules import scripts, sd_samplers_common, sd_samplers
@@ -16,12 +17,15 @@ try:
             def __init__(self):
                 if not smea_dy.INITIALIZED:
                     samplers_smea = [
-                        ("Sa-Solver", sample_sa_solver, ["k_sa_solver"], {}),
-                        ("Sa-Solver Dy", sample_sa_solver_dy, ["k_sa_solver_dy"], {}),
-                        ("Sa-Solver PECE", sample_sa_solver_pece, ["k_sa_solver_pece"], {}),
-                        ("Sa-Solver PECE Dy", sample_sa_solver_pece_dy, ["k_sa_solver_pece_dy"], {}),
-                        ("Sa-Solver SMEA Dy", sample_sa_solver_smea_dy, ["k_sa_solver_smea_dy"], {}),
-                        ("Sa-Solver PECE SMEA Dy", sample_sa_solver_pece_smea_dy, ["k_sa_solver_pece_smea_dy"], {}),
+                        ("SA-Solver", sample_sa_solver, ["k_sa_solver"], {}),
+                        ("SA-Solver Dy", sample_sa_solver_dy, ["k_sa_solver_dy"], {}),
+                        ("SA-Solver PECE", sample_sa_solver_pece, ["k_sa_solver_pece"], {}),
+                        ("SA-Solver PECE Dy", sample_sa_solver_pece_dy, ["k_sa_solver_pece_dy"], {}),
+                        ("SA-Solver SMEA Dy", sample_sa_solver_smea_dy, ["k_sa_solver_smea_dy"], {}),
+                        ("SA-Solver PECE SMEA Dy", sample_sa_solver_pece_smea_dy, ["k_sa_solver_pece_smea_dy"], {}),
+                        ("SA-Solver Experimental Renoise", sample_sa_solver_renoise, ["k_sa_solver_experimental"], {}),
+                        ("SA-Solver Experimental Renoise Dy", sample_sa_solver_renoise_dy, ["k_sa_solver_experimental"], {}),
+                        
                     ]
                     samplers_data_smea = [
                         sd_samplers_common.SamplerData(label, lambda model, funcname=funcname: KDiffusionSampler(funcname, model), aliases, options)

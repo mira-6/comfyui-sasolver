@@ -1,4 +1,4 @@
-from . import impl, smea_dy
+from . import impl, smea_dy, experimental
 
 if smea_dy.BACKEND == "ComfyUI":
     from comfy.k_diffusion import sampling as k_diffusion_sampling
@@ -21,6 +21,7 @@ if smea_dy.BACKEND == "ComfyUI":
     setattr(k_diffusion_sampling, "sample_sa_solver_smea_dy_gpu", impl.sample_sa_solver_smea_dy_gpu)
     setattr(k_diffusion_sampling, "sample_sa_solver_pece_smea_dy", impl.sample_sa_solver_pece_smea_dy)
     setattr(k_diffusion_sampling, "sample_sa_solver_pece_smea_dy_gpu", impl.sample_sa_solver_pece_smea_dy_gpu)
+    setattr(k_diffusion_sampling, "sample_sa_solver_experimental", experimental.sample_sa_solver)
 
     SAMPLER_NAMES.append("sa_solver")
     SAMPLER_NAMES.append("sa_solver_gpu")
@@ -34,7 +35,9 @@ if smea_dy.BACKEND == "ComfyUI":
     SAMPLER_NAMES.append("sa_solver_pece_dy_gpu")
     SAMPLER_NAMES.append("sa_solver_pece_smea_dy")
     SAMPLER_NAMES.append("sa_solver_pece_smea_dy_gpu")
+    SAMPLER_NAMES.append("sa_solver_experimental")
 
     NODE_CLASS_MAPPINGS = {
-        "SamplerSASolver": nodes.SamplerSASolver
+        "SamplerSASolver": nodes.SamplerSASolver,
+        "SamplerSASolverExperimental": nodes.SamplerSASolverExperimental
     }

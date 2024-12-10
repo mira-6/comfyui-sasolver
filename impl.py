@@ -76,9 +76,9 @@ def sample_sa_solver(model, x, sigmas, extra_args=None, callback=None, disable=F
                 if sigmas[i + 1] > 0:
                     if i // 2 == 1:
                         x = smea_dy.dy_sampling_step(x, model, dt, sigma_hat, **extra_args)
-            if smea == True:
-                if i // 2 == 0: 
-                    x = smea_dy.smea_sampling_step(x, model, dt, sigma_hat, **extra_args)
+                    if i // 2 == 0 and smea: 
+                        x = smea_dy.smea_sampling_step(x, model, dt, sigma_hat, **extra_args)
+                
 
             # Predictor step
             x_p = sa_solver.adams_bashforth_update_few_steps(order=predictor_order_used, x=x, tau=tau_val,
@@ -120,7 +120,6 @@ def sample_sa_solver(model, x, sigmas, extra_args=None, callback=None, disable=F
         x = sa_solver.adams_bashforth_update_few_steps(order=1, x=x, tau=0,
                                                        model_prev_list=model_prev_list, sigma_prev_list=sigma_prev_list,
                                                        noise=0, sigma=sigmas[-1])
-
     return x
 
 @torch.no_grad()
@@ -203,3 +202,4 @@ def sample_sa_solver_pece_smea_dy_gpu(model, x, sigmas, extra_args=None, callbac
         return x
     noise_sampler = partial(sa_solver.device_noise_sampler, x=x, noise_device='gpu') if noise_sampler is None else noise_sampler
     return sample_sa_solver(model, x, sigmas, extra_args=extra_args, callback=callback, disable=disable, predictor_order=predictor_order, corrector_order=corrector_order, pc_mode="PECE", tau_func=tau_func, noise_sampler=noise_sampler, smea=True, dyn=True)
+
