@@ -5,7 +5,6 @@ if not BACKEND:
     try:
         _ = import_module("modules.sd_samplers_kdiffusion")
         sampling = import_module("k_diffusion.sampling")
-        sample = import_module("ldm_patched.modules.sample")
         BACKEND = "WebUI"
     except ImportError as _:
         pass
@@ -17,7 +16,6 @@ if not BACKEND:
         BACKEND = "ComfyUI"
     except ImportError as _:
         pass
-
 
 
 from functools import partial
@@ -33,6 +31,27 @@ else:
 from tqdm import trange
 from PIL import Image
 import numpy as np
+
+# from comfyui
+# gpl3
+def prepare_noise(latent_image, seed, noise_inds=None):
+    """
+    creates random noise given a latent image and a seed.
+    optional arg skip can be used to skip and discard x number of noise generations for a given seed
+    """
+    generator = torch.manual_seed(seed)
+    if noise_inds is None:
+        return torch.randn(latent_image.size(), dtype=latent_image.dtype, layout=latent_image.layout, generator=generator, device="cpu")
+    
+    unique_inds, inverse = np.unique(noise_inds, return_inverse=True)
+    noises = []
+    for i in range(unique_inds[-1]+1):
+        noise = torch.randn([1] + list(latent_image.size())[1:], dtype=latent_image.dtype, layout=latent_image.layout, generator=generator, device="cpu")
+        if i in unique_inds:
+            noises.append(noise)
+    noises = [noises[i] for i in inverse]
+    noises = torch.cat(noises, axis=0)
+    return noises
 
 # Tensor to PIL
 # from comfyui-pixel, MIT License
@@ -116,10 +135,10 @@ def sample_sa_solver(model, x, sigmas, vae=None, extra_args=None, callback=None,
                     denoised = vae.encode(image).cuda()
             if renoise == True:
                 if i % 2 == 0:
-                    noised = sample.prepare_noise(denoised, renoise_seed, None).cuda()
+                    noised = prepare_noise(denoised, renoise_seed, None).cuda()
                     denoised = torch.lerp(denoised, noised, 1 / (renoise_scale * i))   
             if renoise_alternative == True:
-                noised = sample.prepare_noise(denoised, renoise_seed, None).cuda()
+                noised = prepare_noise(denoised, renoise_seed, None).cuda()
                 denoised = denoised + (1 / (renoise_scale * i)) * noised
             renoise_seed += 1
             denoised = scale * denoised + shift
