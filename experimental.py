@@ -178,14 +178,14 @@ def sample_sa_solver(model, x, sigmas, vae=None, extra_args=None, callback=None,
     return x
 
 @torch.no_grad()
-def sample_sa_solver_renoise(model, x, sigmas, vae=None, extra_args=None, callback=None, disable=False, predictor_order=3, corrector_order=4, pc_mode="PEC", tau_func=None, noise_sampler=None, smea=False, dyn=False, invert=False, normalize=False, gamma=1.0, scale=1.0, shift=0, renoise=False, renoise_alternative=False, renoise_scale=1.0):
+def sample_sa_solver_renoise(model, x, sigmas, vae=None, extra_args=None, callback=None, disable=False, predictor_order=3, corrector_order=4, pc_mode="PEC", tau_func=None, noise_sampler=None, smea=False, dyn=False, invert=False, normalize=False, gamma=1.0, scale=1.0, shift=0, renoise=False, renoise_alternative=False, renoise_scale=1.0, renoise_seed=1.0):
     if BACKEND == "WebUI":
         from modules import shared
         renoise_scale = shared.opts.renoise_scale
         renoise_seed = shared.opts.renoise_seed
     return sample_sa_solver(model, x, sigmas, vae=None, extra_args=extra_args, callback=callback, disable=disable, predictor_order=predictor_order, corrector_order=corrector_order, pc_mode=pc_mode, tau_func=tau_func, noise_sampler=noise_sampler, smea=False, dyn=False, invert=False, normalize=False, gamma=1.0, scale=1.05, shift=0, renoise=True, renoise_alternative=False, renoise_scale=renoise_scale, renoise_seed=renoise_seed)
 
-def sample_sa_solver_renoise_dy(model, x, sigmas, vae=None, extra_args=None, callback=None, disable=False, predictor_order=3, corrector_order=4, pc_mode="PEC", tau_func=None, noise_sampler=None, smea=False, dyn=False, invert=False, normalize=False, gamma=1.0, scale=1.0, shift=0, renoise=False, renoise_alternative=False, renoise_scale=1.0):
+def sample_sa_solver_renoise_dy(model, x, sigmas, vae=None, extra_args=None, callback=None, disable=False, predictor_order=3, corrector_order=4, pc_mode="PEC", tau_func=None, noise_sampler=None, smea=False, dyn=False, invert=False, normalize=False, gamma=1.0, scale=1.0, shift=0, renoise=False, renoise_alternative=False, renoise_scale=1.0, renoise_seed=1.0):
     if BACKEND == "WebUI":
         from modules import shared
         renoise_scale = shared.opts.renoise_scale
