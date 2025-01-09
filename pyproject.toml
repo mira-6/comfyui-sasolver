@@ -9,6 +9,6 @@ Repository = "https://github.com/mira-6/comfyui-sasolver"
 #  Used by Comfy Registry https://comfyregistry.org
 
 [tool.comfy]
-PublisherId = ""
+PublisherId = "mirav"
 DisplayName = "comfyui-sasolver"
 Icon = ""
