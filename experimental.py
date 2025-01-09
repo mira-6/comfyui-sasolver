@@ -132,13 +132,22 @@ def sample_sa_solver(model, x, sigmas, vae=None, extra_args=None, callback=None,
                     image = to_pil_image(tvf.invert(to_tensor(decoded)))
                     image = np.array(image).astype(np.float32) / 255.0
                     image = torch.from_numpy(image)[None,]
-                    denoised = vae.encode(image).cuda()
+                    try:
+                        denoised = vae.encode(image).cuda()
+                    except:
+                        denoised = vae.encode(image).to('xpu')
             if renoise == True:
                 if i % 2 == 0:
-                    noised = prepare_noise(denoised, renoise_seed, None).cuda()
+                    try:
+                        noised = prepare_noise(denoised, renoise_seed, None).cuda()
+                    except:
+                        noised = prepare_noise(denoised, renoise_seed, None).to('xpu')
                     denoised = torch.lerp(denoised, noised, 1 / (renoise_scale * i))   
             if renoise_alternative == True:
-                noised = prepare_noise(denoised, renoise_seed, None).cuda()
+                try:
+                    noised = prepare_noise(denoised, renoise_seed, None).cuda()
+                except:
+                    noised = prepare_noise(denoised, renoise_seed, None).to('xpu')
                 denoised = denoised + (1 / (renoise_scale * i)) * noised
             renoise_seed += 1
             denoised = scale * denoised + shift
