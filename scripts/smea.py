@@ -2,7 +2,7 @@ try:
     import smea_dy
     
     from impl import sample_sa_solver, sample_sa_solver_dy, sample_sa_solver_pece, sample_sa_solver_pece_dy, sample_sa_solver_smea_dy, sample_sa_solver_pece_smea_dy
-    from experimental import sample_sa_solver_renoise, sample_sa_solver_renoise_dy
+    from experimental import sample_sa_solver_renoise, sample_sa_solver_renoise_dy, sample_sa_solver_renoise_a_dy
     if smea_dy.BACKEND == "WebUI":
         from modules import scripts, sd_samplers_common, sd_samplers, script_callbacks, shared
         from modules.sd_samplers_kdiffusion import sampler_extra_params, KDiffusionSampler
