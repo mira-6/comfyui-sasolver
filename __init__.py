@@ -24,6 +24,7 @@ if smea_dy.BACKEND == "ComfyUI":
     setattr(k_diffusion_sampling, "sample_sa_solver_experimental", experimental.sample_sa_solver)
     setattr(k_diffusion_sampling, "sample_sa_solver_experimental_renoise", experimental.sample_sa_solver_renoise)
     setattr(k_diffusion_sampling, "sample_sa_solver_experimental_renoise_dy", experimental.sample_sa_solver_renoise_dy)
+    setattr(k_diffusion_sampling, "sample_sa_solver_experimental_renoise_a_dy", experimental.sample_sa_solver_renoise_a_dy)
 
     SAMPLER_NAMES.append("sa_solver")
     SAMPLER_NAMES.append("sa_solver_gpu")
@@ -40,6 +41,7 @@ if smea_dy.BACKEND == "ComfyUI":
     SAMPLER_NAMES.append("sa_solver_experimental")
     SAMPLER_NAMES.append("sa_solver_experimental_renoise")
     SAMPLER_NAMES.append("sa_solver_experimental_renoise_dy")
+    SAMPLER_NAMES.append("sa_solver_experimental_renoise_a_dy")
 
     NODE_CLASS_MAPPINGS = {
         "SamplerSASolver": nodes.SamplerSASolver,
