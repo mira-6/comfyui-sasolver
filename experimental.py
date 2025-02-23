@@ -150,11 +150,12 @@ def sample_sa_solver(model, x, sigmas, vae=None, extra_args=None, callback=None,
                             noised = prepare_noise(denoised, renoise_seed, None).to('xpu')
                         denoised = torch.lerp(denoised, noised, 1 / (renoise_scale * i))   
                 elif renoise_alternative == True:
-                    try:
-                        noised = prepare_noise(denoised, renoise_seed, None).cuda()
-                    except:
-                        noised = prepare_noise(denoised, renoise_seed, None).to('xpu')
-                    denoised = denoised + (1 / (renoise_scale * i)) * noised
+                    if i % 2 == 0: 
+                        try:
+                            noised = prepare_noise(denoised, renoise_seed, None).cuda()
+                        except:
+                            noised = prepare_noise(denoised, renoise_seed, None).to('xpu')
+                        denoised = denoised + (1 / (renoise_scale * i)) * noised
             renoise_seed += 1
             denoised = scale * denoised + shift
             model_prev_list.append(denoised) 
