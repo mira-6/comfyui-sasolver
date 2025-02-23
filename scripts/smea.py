@@ -2,7 +2,7 @@ try:
     import smea_dy
     
     from impl import sample_sa_solver, sample_sa_solver_dy, sample_sa_solver_pece, sample_sa_solver_pece_dy, sample_sa_solver_smea_dy, sample_sa_solver_pece_smea_dy
-    from experimental import sample_sa_solver_renoise, sample_sa_solver_renoise_dy, sample_sa_solver_renoise_a_dy
+    from experimental import sample_sa_solver_renoise, sample_sa_solver_renoise_dy, sample_sa_solver_renoise_a_dy, sample_sa_solver_pece_renoise, sample_sa_solver_pece_renoise_dy
     if smea_dy.BACKEND == "WebUI":
         from modules import scripts, sd_samplers_common, sd_samplers, script_callbacks, shared
         from modules.sd_samplers_kdiffusion import sampler_extra_params, KDiffusionSampler
@@ -27,7 +27,8 @@ try:
                         ("SA-Solver Experimental Renoise", sample_sa_solver_renoise, ["k_sa_solver_experimental"], {}),
                         ("SA-Solver Experimental Renoise Dy", sample_sa_solver_renoise_dy, ["k_sa_solver_experimental"], {}),
                         ("SA-Solver Experimental Renoise Alternative Dy", sample_sa_solver_renoise_a_dy, ["k_sa_solver_experimental"], {}),
-                        
+                        ("Commander Special: SA-Solver PECE Renoise", sample_sa_solver_pece_renoise, ["k_sa_solver_experimental"], {}),
+                        ("Commander Special: SA-Solver PECE Renoise Dy", sample_sa_solver_pece_renoise_dy, ["k_sa_solver_experimental"], {}),
                     ]
                     samplers_data_smea = [
                         sd_samplers_common.SamplerData(label, lambda model, funcname=funcname: KDiffusionSampler(funcname, model), aliases, options)
