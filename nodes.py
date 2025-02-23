@@ -62,7 +62,7 @@ class SamplerSASolverExperimental:
                     "renoise": ("BOOLEAN", {"default": False, "tooltip": "scale = 1.05 is recommended for renoise."}), # scale = 1.05 is recommended for renoise.
                     "renoise_alternative": ("BOOLEAN", {"default": False}),
                     "renoise_scale": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 100.0, "step":0.01, "round": False}),
-                    "renoise_seed": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff}),
+                    "renoise_seed": ("INT", {"default": 0, "min": -1, "max": 0xffffffffffffffff}),
                     "eta": ("FLOAT", {"default": 1.0, "min": 0.0, "max": 100.0, "step":0.01, "round": False}),
                     "eta_start_percent": ("FLOAT", {"default": 0.2, "min": 0.0, "max": 1.0, "step": 0.001}),
                     "eta_end_percent": ("FLOAT", {"default": 0.8, "min": 0.0, "max": 1.0, "step": 0.001}),

@@ -87,6 +87,11 @@ def sample_sa_solver(model, x, sigmas, vae=None, extra_args=None, callback=None,
     sigma_prev_list = []
     model_prev_list = []
 
+    if renoise_seed = -1:
+        import random,sys
+        random.seed(torch.initial_seed())
+        renoise_seed = random.randint(0, sys.maxsize) 
+
     for i in trange(len(sigmas) - 1, disable=disable):
         sigma = sigmas[i]
         if i == 0:
@@ -137,18 +142,19 @@ def sample_sa_solver(model, x, sigmas, vae=None, extra_args=None, callback=None,
                     except:
                         denoised = vae.encode(image).to('xpu')
             if renoise == True:
-                if i % 2 == 0:
+                if renoise_alternative == False:
+                    if i % 2 == 0:
+                        try:
+                            noised = prepare_noise(denoised, renoise_seed, None).cuda()
+                        except:
+                            noised = prepare_noise(denoised, renoise_seed, None).to('xpu')
+                        denoised = torch.lerp(denoised, noised, 1 / (renoise_scale * i))   
+                elif renoise_alternative == True:
                     try:
                         noised = prepare_noise(denoised, renoise_seed, None).cuda()
                     except:
                         noised = prepare_noise(denoised, renoise_seed, None).to('xpu')
-                    denoised = torch.lerp(denoised, noised, 1 / (renoise_scale * i))   
-            if renoise_alternative == True:
-                try:
-                    noised = prepare_noise(denoised, renoise_seed, None).cuda()
-                except:
-                    noised = prepare_noise(denoised, renoise_seed, None).to('xpu')
-                denoised = denoised + (1 / (renoise_scale * i)) * noised
+                    denoised = denoised + (1 / (renoise_scale * i)) * noised
             renoise_seed += 1
             denoised = scale * denoised + shift
             model_prev_list.append(denoised) 
@@ -200,3 +206,10 @@ def sample_sa_solver_renoise_dy(model, x, sigmas, vae=None, extra_args=None, cal
         renoise_scale = shared.opts.renoise_scale
         renoise_seed = shared.opts.renoise_seed
     return sample_sa_solver(model, x, sigmas, vae=None, extra_args=extra_args, callback=callback, disable=disable, predictor_order=predictor_order, corrector_order=corrector_order, pc_mode=pc_mode, tau_func=tau_func, noise_sampler=noise_sampler, smea=False, dyn=True, invert=False, normalize=False, gamma=1.0, scale=1.05, shift=0, renoise=True, renoise_alternative=False, renoise_scale=renoise_scale, renoise_seed=renoise_seed)
+
+def sample_sa_solver_renoise_a_dy(model, x, sigmas, vae=None, extra_args=None, callback=None, disable=False, predictor_order=3, corrector_order=4, pc_mode="PEC", tau_func=None, noise_sampler=None, smea=False, dyn=False, invert=False, normalize=False, gamma=1.0, scale=1.0, shift=0, renoise=False, renoise_alternative=False, renoise_scale=1.0, renoise_seed=1.0):
+    if BACKEND == "WebUI":
+        from modules import shared
+        renoise_scale = shared.opts.renoise_scale
+        renoise_seed = shared.opts.renoise_seed
+    return sample_sa_solver(model, x, sigmas, vae=None, extra_args=extra_args, callback=callback, disable=disable, predictor_order=predictor_order, corrector_order=corrector_order, pc_mode=pc_mode, tau_func=tau_func, noise_sampler=noise_sampler, smea=False, dyn=True, invert=False, normalize=False, gamma=1.0, scale=1.05, shift=0, renoise=True, renoise_alternative=True, renoise_scale=renoise_scale, renoise_seed=renoise_seed)

@@ -26,6 +26,7 @@ try:
                         ("SA-Solver PECE SMEA Dy", sample_sa_solver_pece_smea_dy, ["k_sa_solver_pece_smea_dy"], {}),
                         ("SA-Solver Experimental Renoise", sample_sa_solver_renoise, ["k_sa_solver_experimental"], {}),
                         ("SA-Solver Experimental Renoise Dy", sample_sa_solver_renoise_dy, ["k_sa_solver_experimental"], {}),
+                        ("SA-Solver Experimental Renoise Alternative Dy", sample_sa_solver_renoise_a_dy, ["k_sa_solver_experimental"], {}),
                         
                     ]
                     samplers_data_smea = [
@@ -62,7 +63,7 @@ try:
             component = gr.Slider,
             component_args = { 
                             'interactive': True, 
-                            'minimum':0, 
+                            'minimum':-1, 
                             'maximum':0xffffffffffffffff, 
                             'step':1, 
                             },
