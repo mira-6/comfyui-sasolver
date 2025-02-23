@@ -87,7 +87,7 @@ def sample_sa_solver(model, x, sigmas, vae=None, extra_args=None, callback=None,
     sigma_prev_list = []
     model_prev_list = []
 
-    if renoise_seed = -1:
+    if renoise_seed == -1:
         import random,sys
         random.seed(torch.initial_seed())
         renoise_seed = random.randint(0, sys.maxsize) 
